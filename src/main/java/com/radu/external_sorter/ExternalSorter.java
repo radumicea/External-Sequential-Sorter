@@ -211,9 +211,10 @@ public final class ExternalSorter
         Serializable[] out = new Serializable[maxCount / 2];
 
         int i = 0;
+        IndexValuePair<T> smallest;
         while (!(queue.isEmpty()))
         {
-            IndexValuePair<T> smallest = queue.poll();
+            smallest = queue.poll();
             out[i] = smallest.value;
             i++;
 
