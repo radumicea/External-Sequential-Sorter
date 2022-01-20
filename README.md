@@ -11,4 +11,4 @@ The public static method "sort" should be used. It has 4 parameters:
 A good maxObjReadInMemory would be equal to ceil(sqrt(number_of_objects_in_input_file)) + 1
 
 ## How it works
-The program will try to split the original file into n small files that can fit in memory. Then, it will sort the contents of the files (according to a given comparator) using Shell Sort. Afterwards, it will merge the n sorted files into a single one using a Priority Queue.
+The program will split the original file into n small files that can fit in memory. Then, it will sort the contents of the files (according to a given comparator) using Shell Sort. Afterwards, it will merge the n sorted files into a single one using a Priority Queue.
