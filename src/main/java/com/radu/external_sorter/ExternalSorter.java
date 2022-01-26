@@ -60,9 +60,10 @@ public final class ExternalSorter
         short fileNr = 0;
         boolean repeat = true;
 
+        int i;
+        int j;
         while (repeat)
         {
-            int i;
             for (i = 0; i < maxCount; i++)
             {
                 try
@@ -82,7 +83,7 @@ public final class ExternalSorter
 
                 shellSort(a, i, gap, objCmp);
 
-                for (int j = 0; j < i; j++)
+                for (j = 0; j < i; j++)
                 {
                     w.write(a[j]);
                 }
@@ -103,6 +104,7 @@ public final class ExternalSorter
 
         int i = -1;
         int g = 1;
+        final int n_over_three = n / 3;
 
         do
         {
@@ -120,7 +122,7 @@ public final class ExternalSorter
                 gap.add(g);
             }
 
-        } while (g <= n / 3);
+        } while (g <= n_over_three);
 
         return gap;
     }
@@ -134,13 +136,14 @@ public final class ExternalSorter
         (Serializable[] a, int n, ArrayList<Integer> gap, ObjCmp<T> objCmp)
     {
         int i = gap.size() - 1;
+        int g;
         int l;
         int r;
         Serializable key;
 
         while (i >= 0)
         {
-            int g = gap.get(i);
+            g = gap.get(i);
 
             for (r = g; r < n; r++)
             {
@@ -162,7 +165,8 @@ public final class ExternalSorter
     private static ObjectReader[] initObjectReaders(short n) throws IOException
     {
         ObjectReader[] r = new ObjectReader[n];
-        for (short i = 0; i < n; i++)
+        short i;
+        for (i = 0; i < n; i++)
         {
             r[i] = new ObjectReader("e_sort_" + Short.toString(i) + ".tmp");
         }
@@ -177,9 +181,13 @@ public final class ExternalSorter
         IVPComparator<T> ivpCmp = new IVPComparator<T>(cmp);
         PriorityQueue<IndexValuePair<T>> pq = new PriorityQueue<IndexValuePair<T>>(size, ivpCmp);
 
-        for (short i = 0; i < n; i++)
+        final int small_size = size / n;
+
+        short i;
+        int j;
+        for (i = 0; i < n; i++)
         {
-            for (int j = 0; j < size / n; j++)
+            for (j = 0; j < small_size; j++)
             {
                 try
                 {
@@ -211,8 +219,9 @@ public final class ExternalSorter
         Serializable[] out = new Serializable[maxCount / 2];
 
         int i = 0;
+        int j;
         IndexValuePair<T> smallest;
-        while (!(queue.isEmpty()))
+        while (queue.isEmpty() == false)
         {
             smallest = queue.poll();
             out[i] = smallest.value;
@@ -229,7 +238,7 @@ public final class ExternalSorter
 
             if (i == maxCount / 2)
             {
-                for (int j = 0; j < i; j++)
+                for (j = 0; j < i; j++)
                 {
                     w.write(out[j]);
                 }
@@ -240,7 +249,7 @@ public final class ExternalSorter
 
         if (i != 0)
         {
-            for (int j = 0; j < i; j++)
+            for (j = 0; j < i; j++)
             {
                 w.write(out[j]);
             }
@@ -253,16 +262,19 @@ public final class ExternalSorter
 
     private static void deleteFiles(short n)
     {
-        for (short i = 0; i < n; i++)
+        File f;
+        short i;
+        for (i = 0; i < n; i++)
         {
-            File f = new File("e_sort_" + Short.toString(i) + ".tmp");
+            f = new File("e_sort_" + Short.toString(i) + ".tmp");
             f.delete();
         }
     }
 
     private static void finishObjectReaders(ObjectReader[] r, short n) throws IOException
     {
-        for (short i = 0; i < n; i++)
+        short i;
+        for (i = 0; i < n; i++)
         {
             r[i].finish();
         }
